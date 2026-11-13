@@ -1,0 +1,132 @@
+# Your AI Can't Prove What It Told You
+
+*Everyone is trying to prove the model is honest. Almost nobody is proving the record is. One of those is a research programme; the other is an afternoon.*
+
+---
+
+Picture a support agent that told a customer they'd get their $49 back in three to five business days.
+
+Six weeks later the customer says nobody ever told them that. You go looking for what the model actually said, and you find: a log your own team can edit, on a server your own team controls, inside a vendor console that keeps thirty days of history.
+
+You have testimony. You do not have evidence.
+
+This is not a model problem. The model might have been perfectly correct. It is a **record** problem, and it is the one that shows up in disputes, in audits, in chargebacks, and in the awkward meeting where legal asks "can you show me exactly what it said" and the honest answer is a screenshot.
+
+## Two different questions, routinely confused
+
+Every serious conversation about AI trust collapses two questions into one:
+
+1. **Did the model do what it claims to do?** Evals, red-teaming, benchmarks, alignment.
+2. **What did the model actually say, to whom, when?**
+
+Almost all of the money and attention goes to question one. Question two gets a shrug, because it sounds trivial. It is not trivial, and it is not solved — it is simply unsolved in a boring way, so nobody funds it.
+
+Question two is the one you need at 2 a.m. when a customer forwards you a promise you have no way to confirm or deny.
+
+## Three fixes that don't fix it
+
+**Screenshots.** Pixels of text, produced by a machine, on a page the accused party rendered. Admissible in the sense that a court will look at it; worthless in the sense that it proves nothing about the bytes.
+
+**"We keep logs."** A vendor-side log is a *policy*, not a proof. It is subject to retention windows, to silent migration between clusters, to a `UPDATE` statement, and to the entirely reasonable desire of a company not to lose a lawsuit. The party holding the pen is the party being accused. That is not evidence; that is a press release.
+
+**Prove the whole computation.** zkML and TEEs are real and getting better. But look at the shape of the mismatch: to establish something about **900 bytes of text**, you are asked to prove a forward pass over hundreds of billions of parameters. That is six to ten orders of magnitude more work than the question deserves. TEEs are cheaper, but they move the trust rather than remove it — into a silicon vendor, a runtime measurement, and an operator who can still sign a different answer after the fact unless the quote covers the output.
+
+None of these answers the question "has this text changed since it was produced". All of them cost a fortune. That question costs a quarter of a millisecond.
+
+## So sign the sentence
+
+The smallest system that answers question two has four parts:
+
+1. **Sign at the moment of emission.** Every answer gets a receipt: the prompt, the answer, the model reference, the parameters, the timestamp, and a chain link to the receipt before it.
+2. **Canonicalise before hashing.** Two parties must produce byte-identical input to the hash, or the signature verifies on one machine and fails on another.
+3. **Chain the receipts.** Each one carries the digest of the previous one, so the sequence is not a pile of files, it is a history.
+4. **Commit to the batch.** Fold the day's receipts into one Merkle root and publish it somewhere the signer does not control.
+
+Here is the whole receipt. Eight hundred and seven bytes:
+
+```json
+{
+  "v": 1,
+  "id": "rcpt_72cce8962c314b6c",
+  "prev": "90dbba088a7d5d51…",
+  "issued_at": "2026-11-13T09:32:02.732Z",
+  "model": { "provider": "local-demo", "id": "support-echo-1",
+             "params": { "temperature": 0, "deterministic": true } },
+  "request":  { "text": "Customer 4412 says they were charged twice…",
+                "sha256": "35f9a4b30384a6b2…" },
+  "response": { "text": "I found two settled charges of $49.00…",
+                "sha256": "58679808471d2508…" },
+  "kid": "p256:ad6df0816753cf39",
+  "sig": "gM1LTOhO8p7KtRUqkRnx6Sg4h2v…"
+}
+```
+
+Four decisions in there are load-bearing, and each one exists because of a specific failure.
+
+**RFC 8785, not `JSON.stringify`.** Insertion order is not deterministic across implementations, and neither is number formatting: `1e21` vs `1000000000000000000000`, `-0` vs `0`, a lone surrogate, `\u2028`. If the signer and the verifier disagree about any of these, the signature fails on a receipt that nobody touched — and the first person to hit it will conclude the scheme is broken, not their serialiser. RFC 8785 is short; read it once and implement it in a hundred lines.
+
+**ECDSA P-256, not HMAC.** An HMAC receipt can only be checked by somebody holding the secret — which is the party you are trying to hold to account. Evidence has to be checkable by a stranger with the receipt and a public key.
+
+**A hash chain, not per-file checksums.** A checksum catches an edit to *that file*. It does not catch an edit where someone regenerates the whole file and recomputes its checksum. A chain does, and here is the part most implementations get wrong in the UI: editing receipt 02 does **not** break the link *into* receipt 02. It breaks the link that receipt 03 holds, because 03 committed to a digest that no longer exists. If your inspector only shows the incoming link, the tampered row looks fine and the break appears one row down, unexplained.
+
+**Merkle with domain separation, promoting odd nodes.** Prefix leaves with `0x00` and inner nodes with `0x01`, or a crafted leaf can be passed off as an inner node (the RFC 6962 §2.1 argument). Promote the odd node rather than duplicating it, or two different receipt lists can produce the same root.
+
+## What it looks like when it breaks
+
+The demo is three support answers, signed in the tab, with no network and no keys to paste.
+
+![Three signed receipts with a chain rail and an inspector panel](https://raw.githubusercontent.com/hkmpn9s6dh-commits/hackathon-2026-decentralize-ai/main/proof/shots/03-tampered.png)
+
+Press **Tamper**, and exactly one character changes. The seal on that receipt flips from `VERIFIED` to `VOID`, the digest check recomputes and prints both hashes side by side, the outgoing chain link fails, and the published Merkle root stops matching the rebuilt one.
+
+The verifier is a second tab on the same page. Drop a `.receipts.json` in and it recomputes every digest, every signature, the chain, and the root — in your browser, from the bytes in the file. Edit one word in that JSON by hand and it comes back `bundle broken`, with the receipt named.
+
+No account. No network call. `grep` the built bundle for external URLs and there are none.
+
+## The number that matters
+
+A receipt is only going to be adopted if it is free. Measured in headless Chrome 125 on an i5-12450H laptop, over 300 iterations, for an 807-byte receipt:
+
+| Operation | Time |
+|---|---|
+| SHA-256 over the canonical bytes | **0.022 ms** |
+| ECDSA P-256 signature | **0.208 ms** |
+
+About **a quarter of a millisecond per answer**, against a model call that takes hundreds to thousands of milliseconds. The receipt is smaller than the telemetry you already ship. This is not a cost decision. It is a decision about whether you want the record to be evidence.
+
+## What it does not prove — and this is the important part
+
+An attestation scheme that overclaims is worse than none, because it invites trust it cannot support. A receipt proves **this text has not changed since this key signed it, at this point in this chain**. That is all.
+
+It does **not** prove:
+
+- **Who the signer is.** Possession of a key, nothing more. If the key travels inside the bundle, the maths still passes and the attribution is still worthless — you are asking the accused to supply the witness. Pin the fingerprint out of band: a DNS TXT record, a signed release, a contract annex. Same move as Signal's safety numbers, and it is deliberately manual.
+- **Which model ran.** The receipt carries a model reference *as asserted by the signer*. A provider that quietly routes to a cheaper model can sign the lie perfectly. This is the largest hole in the scheme and no amount of hashing closes it. The honest options are provider-signed receipts (shifts trust to a company that can be sued), hardware attestation (covers the runtime, not the weights), or replaying a random 1% of receipts against the named model (cheap, statistical, and the only one that catches a substitution after the fact).
+- **That this is the only version of history.** A signer can generate a new key, re-sign a different sequence, and publish a different root. Anyone holding only the new bundle sees a perfectly consistent story. The defence is publishing the root where the signer does not control it — and that is exactly where "decentralised" stops being ideology and starts being a requirement.
+- **That the timestamp is real.** `issued_at` is whatever the signer's clock said, until the root is anchored to something external.
+
+## Why this has to be open infrastructure
+
+Three reasons, none of them philosophical:
+
+1. **The verifier cannot be run by the party being verified.** If the only way to check a receipt is to log into the vendor's dashboard, you have built a screenshot with extra steps.
+2. **The anchor cannot live only on the signer's disk.** A root that exists solely in the signer's database is a root the signer can rewrite. Permanent, permissionless storage is the cheapest way to make two contradictory versions of history mutually destructive.
+3. **The code has to be small enough to read in an afternoon.** This is why the verifier here has no build-time dependencies, no network calls, and a canonicaliser you can audit in one sitting. Trust in a black box is not verification; it is a different word for the same problem.
+
+That is the layer worth standardising: not "prove the model", but "prove the record". It is small enough to be a commodity, and it is the only layer that has to be open.
+
+## What you could do on Monday
+
+1. **Sign at emission.** Hash and sign the answer where it is produced, before it is stored. One signature per call, ~0.2 ms. If you can log it, you can sign it.
+2. **Pin the key out of band.** A DNS TXT record with the fingerprint is enough to start. Publish it where your customer can find it without asking you.
+3. **Publish a daily root.** Any append-only surface will do — a transparency log, a permanent-storage network, even a public git commit. The point is that two versions of the same day cannot both be true.
+
+Everything else — chain across sessions, inclusion proofs, selective disclosure of the prompt — is elaboration on those three.
+
+A receipt is not a promise that the model is honest. It is a promise that the record is. In 2026 that is the cheaper promise, and it is the one nobody is making.
+
+---
+
+*The demo, source, threat model and tests: [github.com/hkmpn9s6dh-commits/hackathon-2026-decentralize-ai](https://github.com/hkmpn9s6dh-commits/hackathon-2026-decentralize-ai). MIT. No network, no keys, no accounts.*
+
+*Entry for the [Decentralize AI Hackathon](https://decentralizeai.tech/) by HackerNoon.*

@@ -54,7 +54,7 @@ else changes, because the receipt signs what came back, not where it came from.
 | `src/core/bundle.ts` | portable `.receipts.json` and the offline verifier |
 | `src/demo/` | the demo model and the UI |
 | `test/` | 30 assertions, all against the real modules, no mocks |
-| `scripts/e2e.mjs` | 31 browser checks against the production build, screenshots in `proof/shots/` |
+| `scripts/e2e.mjs` | 32 browser checks against the production build, screenshots in `proof/shots/` |
 | `docs/` | brief, spec, threat model, proof, submission notes, UI decisions |
 
 ## What this proves, and what it does not

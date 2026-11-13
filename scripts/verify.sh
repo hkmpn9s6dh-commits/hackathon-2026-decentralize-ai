@@ -21,7 +21,7 @@ echo
 check "typecheck (tsc --noEmit)" npm run typecheck
 check "unit tests (30 assertions)" npm test
 check "build (tsc + vite)" npm run build
-check "e2e against dist (31 checks)" node scripts/e2e.mjs
+check "e2e against dist (32 checks)" node scripts/e2e.mjs
 
 # AC-12: nothing in the shipped bundle may talk to a third party.
 # Vite's modulepreload polyfill legitimately calls fetch() on same-origin <link> hrefs,

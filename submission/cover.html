@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cover</title>
+    <style>
+      :root {
+        --paper: #f4f1e8;
+        --card: #fffdf7;
+        --ink: #15171b;
+        --muted: #6a675f;
+        --hair: #ded8c9;
+        --fail: #a32a1e;
+        --serif: Georgia, 'Times New Roman', serif;
+        --mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+        --sans: system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        width: 100vw; height: 100vh; overflow: hidden;
+        background:
+          radial-gradient(120% 90% at 82% 0%, #fffdf6 0%, transparent 62%),
+          var(--paper);
+        color: var(--ink);
+        padding: 7vh 6vw;
+        display: grid;
+        grid-template-columns: 1.42fr 1fr;
+        gap: 4vw;
+        align-items: center;
+        font-family: var(--sans);
+      }
+
+      .left { display: flex; flex-direction: column; gap: 3.2vh; }
+
+      .kicker {
+        font: 600 1.15vw/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase;
+        color: var(--muted);
+      }
+      .kicker b { color: var(--fail); font-weight: 600; }
+
+      h1 {
+        font: 400 5.5vw/1.06 var(--serif);
+        letter-spacing: -0.028em;
+        text-wrap: balance;
+      }
+      h1 em { font-style: italic; }
+
+      .rule { height: 1px; background: var(--hair); }
+
+      .sub {
+        font: 400 1.5vw/1.45 var(--sans);
+        color: var(--ink); max-width: 30ch;
+      }
+      .meta {
+        font: 400 1.02vw/1.6 var(--mono); color: var(--muted);
+      }
+      .meta span { color: var(--ink); }
+
+      /* the receipt strip */
+      .strip {
+        position: relative;
+        background: var(--card);
+        border: 1px solid var(--hair);
+        border-radius: 0.9vw;
+        box-shadow: 0 2vw 4vw -2.6vw rgba(21, 23, 27, 0.55);
+        padding: 2.4vw 2vw 4.4vw;
+        transform: rotate(-1.6deg);
+        display: flex; flex-direction: column; gap: 1.1vw;
+      }
+      .strip__head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        font: 600 0.92vw/1 var(--mono); letter-spacing: 0.14em; color: var(--muted);
+      }
+      .strip__line {
+        font: 400 1.05vw/1.5 var(--mono); color: var(--muted);
+        display: flex; justify-content: space-between; gap: 1vw;
+        border-bottom: 1px dashed var(--hair); padding-bottom: 0.6vw;
+      }
+      .strip__line b { color: var(--ink); font-weight: 500; }
+      .strip__answer {
+        font: 400 1.32vw/1.45 var(--serif); color: var(--ink);
+      }
+      .strip__answer s {
+        text-decoration: none; background: var(--fail); color: #fff;
+        padding: 0 0.14vw; border-radius: 0.15vw;
+      }
+      .strip__foot {
+        font: 400 0.92vw/1.5 var(--mono); color: var(--muted);
+        border-top: 1px dashed var(--hair); padding-top: 0.7vw;
+        word-break: break-all;
+      }
+
+      /* the seal — the one thing that must survive a 300 px thumbnail */
+      .seal {
+        position: absolute; right: -1.1vw; bottom: -2.6vw;
+        width: 9.8vw; height: 9.8vw; border-radius: 50%;
+        border: 0.32vw solid var(--fail); color: var(--fail);
+        display: grid; place-content: center; text-align: center;
+        font: 600 1.28vw/1.15 var(--mono); letter-spacing: 0.06em;
+        transform: rotate(-14deg);
+        background: rgba(247, 229, 225, 0.86);
+        box-shadow: 0 0 0 0.28vw rgba(163, 42, 30, 0.12);
+      }
+      .seal::before {
+        content: ''; position: absolute; inset: 0.7vw; border-radius: 50%;
+        border: 0.1vw solid currentColor; opacity: 0.6;
+      }
+      .seal span { display: block; font-size: 2.15vw; letter-spacing: 0.05em; margin-bottom: 0.25vw; }
+    </style>
+  </head>
+  <body>
+    <div class="left">
+      <div class="kicker">Decentralize AI · HackerNoon <b>/ entry</b></div>
+      <h1>Your AI can’t prove<br />what it <em>told</em> you.</h1>
+      <div class="rule"></div>
+      <p class="sub">Sign the sentence, not the model. A receipt for every answer — verifiable by a stranger, offline.</p>
+      <p class="meta">ECDSA P-256 · SHA-256 · RFC 8785 · <span>0.21 ms per answer</span></p>
+    </div>
+
+    <div class="strip" aria-hidden="true">
+      <div class="strip__head"><span>RECEIPT 02</span><span>local-demo/echo-1</span></div>
+      <div class="strip__answer">
+        No. The 30-day window is a billing policy… I can offer a service credit of one month
+        <s>i</s>nstead.
+      </div>
+      <div class="strip__line"><span>prev</span><b>90dbba088a7d5d51…</b></div>
+      <div class="strip__line"><span>answer</span><b>58679808471d2508…</b></div>
+      <div class="strip__line"><span>sig</span><b>gM1LTOhO8p7KtRUqkRnx6Sg4h2v…</b></div>
+      <div class="strip__line"><span>kid</span><b>p256:ad6df0816753</b></div>
+      <div class="seal"><span>VOID</span>MISMATCH</div>
+    </div>
+  </body>
+</html>
