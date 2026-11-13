@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Receipts — every answer, provable</title>
+    <meta
+      name="description"
+      content="Verifiable inference receipts: prove what a model actually said, offline, without trusting the vendor."
+    />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2316181c'/%3E%3Cpath d='M9 11h14M9 16h14M9 21h9' stroke='%23f6f4ef' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <script type="module" crossorigin src="./assets/index-DXpePGOh.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DSBq-Knc.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__name">Receipts</span>
+        <span class="brand__tag">every answer, provable</span>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Views">
+        <button class="tab is-active" role="tab" aria-selected="true" data-view="session" id="tab-session">
+          Session
+        </button>
+        <button class="tab" role="tab" aria-selected="false" data-view="verify" id="tab-verify">
+          Verify a bundle
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- ─────────────────────────── session view ─────────────────────────── -->
+      <section class="view is-active" id="view-session" role="tabpanel" aria-labelledby="tab-session">
+        <div class="lede">
+          <h1>Three answers. One chain. Nobody can edit them afterwards.</h1>
+          <p>
+            A support assistant answered three questions. Each answer was hashed, signed and
+            linked to the one before it. Press <em>Tamper</em> and watch the exact character
+            that changed light up the chain.
+          </p>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn--primary" id="run">Run the three prompts</button>
+          <button class="btn" id="tamper" disabled>Tamper with answer 02</button>
+          <button class="btn" id="reset" disabled>Reset</button>
+          <span class="controls__note" id="state-note">nothing signed yet</span>
+        </div>
+
+        <div class="split">
+          <div class="session" id="session" aria-live="polite">
+            <p class="empty">No receipts yet. The key pair is generated in this tab and never leaves it.</p>
+          </div>
+
+          <aside class="inspector" id="inspector">
+            <div class="inspector__head">
+              <span class="eyebrow">Inspector</span>
+              <span class="verdict verdict--idle" id="verdict">idle</span>
+            </div>
+            <div class="inspector__body" id="inspector-body">
+              <p class="muted">
+                Select a receipt to see every check run against it: the two digests, the
+                signature, the chain link, and its place in the batch.
+              </p>
+            </div>
+          </aside>
+        </div>
+
+        <section class="batch" id="batch" hidden>
+          <div class="batch__head">
+            <span class="eyebrow">Merkle batch</span>
+            <span class="muted" id="batch-count"></span>
+          </div>
+          <div class="batch__root" id="batch-root"></div>
+          <div class="batch__actions">
+            <button class="btn btn--small" id="prove">Prove answer 02 is in this batch</button>
+            <button class="btn btn--small" id="export">Download the bundle</button>
+          </div>
+          <div class="proof" id="proof" hidden></div>
+        </section>
+      </section>
+
+      <!-- ─────────────────────────── verify view ─────────────────────────── -->
+      <section class="view" id="view-verify" role="tabpanel" aria-labelledby="tab-verify" hidden>
+        <div class="lede">
+          <h2 class="h1">This page is the other party.</h2>
+          <p>
+            Drop a <code>.receipts.json</code> bundle here. Everything below is recomputed in
+            your browser from the bytes in the file — no server, no account, no trust.
+          </p>
+        </div>
+
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Drop a bundle or press Enter to pick a file">
+          <p><strong>Drop a bundle</strong> or <span class="link">choose a file</span></p>
+          <p class="muted">or <button class="link" id="paste-demo" type="button">paste the demo bundle</button></p>
+          <input type="file" id="file" accept=".json,application/json" hidden />
+        </div>
+
+        <div class="report" id="report" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>ECDSA P-256 · SHA-256 · RFC 8785 canonical JSON · Merkle tree with domain separation</span>
+      <span>No network calls. No analytics. The key never leaves the tab.</span>
+    </footer>
+
+  </body>
+</html>
