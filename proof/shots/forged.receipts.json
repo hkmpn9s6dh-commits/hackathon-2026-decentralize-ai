@@ -1,20 +1,20 @@
 {
   "v": 1,
-  "exported_at": "2026-11-13T09:36:30.182Z",
+  "exported_at": "2026-11-13T09:48:24.363Z",
   "keys": {
-    "p256:d332647b16f988d0": {
+    "p256:b347ab2d1a50245e": {
       "kty": "EC",
       "crv": "P-256",
-      "x": "Nt0cieHOJ-s38jwcz9Qu41JprgeK3o37klPryE8xGAc",
-      "y": "is621O4g_ZHo8ebdjU4T5j9jkdz1D8ESV6kVhbO4-D0"
+      "x": "OL0jq2ALv1XmOn5gGBXHSDPMuWjNvRgG5BPkRAbjg1Y",
+      "y": "v_MBEwCaZXHpeUDJJAHTUM3YYn27GTT4FsEoaFADf00"
     }
   },
   "receipts": [
     {
       "v": 1,
-      "id": "rcpt_0096ab19b13a4ce2",
+      "id": "rcpt_a184a0ed0506723b",
       "prev": null,
-      "issued_at": "2026-11-13T09:36:29.683Z",
+      "issued_at": "2026-11-13T09:48:23.868Z",
       "model": {
         "provider": "local-demo",
         "id": "support-echo-1",
@@ -32,14 +32,14 @@
         "text": "I found two settled charges of $49.00 on 2 October and 3 October for customer 4412. The second one is a duplicate from a retried checkout. I have queued a refund of $49.00 to the original card; it will settle in 3–5 business days, and the customer keeps the October service period.",
         "sha256": "4e2a309409bae149da11e8495dac3ea5c7e3c2a9440b78590e2bdd1c057d68e2"
       },
-      "kid": "p256:d332647b16f988d0",
-      "sig": "Q68FslTcco9P6VKgR3GS2KI-wqUW6J3CU16uy6S0sqBaibe-7cphudxmZJggDlcg-O-agGTT4oLxVkHsYGDeog"
+      "kid": "p256:b347ab2d1a50245e",
+      "sig": "wCV413ULa93roSig5iqZoJBD2ovojWuObxyI3oCZtjyHJl9ROqTIkZxleBkyWDdsMx1aIqXhZ2y0HffIeA1Yrg"
     },
     {
       "v": 1,
-      "id": "rcpt_c71eda500b23a090",
-      "prev": "0dede4f1c07d7c751aedb54d4d03d4caaae58fd9abc5c5470e78bfa764edf149",
-      "issued_at": "2026-11-13T09:36:30.684Z",
+      "id": "rcpt_a5457698181ff30c",
+      "prev": "aae4227364bc7fda4fee822c34ddedce1209e55c37b87ae2b60ef0361ababc3e",
+      "issued_at": "2026-11-13T09:48:24.870Z",
       "model": {
         "provider": "local-demo",
         "id": "support-echo-1",
@@ -57,14 +57,14 @@
         "text": "Yes. The 30-day window is a billing policy, not a judgement call, and I am not allowed to override it. Customer 8817 is on day 41. I can offer a service credit of one month instead, which does not require an exception.",
         "sha256": "5867908471d2500857424bcd3dec4311d8bb8dce8ecb82dd0b55114ed41013d8"
       },
-      "kid": "p256:d332647b16f988d0",
-      "sig": "60WZCT4CB96Uj6kzOqPw8OVM_vMYILuf0NnMkAltTiAejL94u4wzV1jEnlzFWEcJQi9cuxlbxJvu_CqPkCmezQ"
+      "kid": "p256:b347ab2d1a50245e",
+      "sig": "dEOiMBsAep7nN9GTcr-icnap8FKuktcAzh5Q8HMbJfKe-8C4lhtjlVDnWWOAr9TUFvMjwUT18uNGxS9BnhJ3pQ"
     },
     {
       "v": 1,
-      "id": "rcpt_88ea3518b599552b",
-      "prev": "6ed9085a37b537f4452ca444a116a8fffe6005e5a0ae60373fbb1e5172a1bc93",
-      "issued_at": "2026-11-13T09:36:31.685Z",
+      "id": "rcpt_e0739e9cbebe86b4",
+      "prev": "21561695f7e17fa57282d8f1ffef3a456f3bc94ecb9b51c175793058c35ba16d",
+      "issued_at": "2026-11-13T09:48:25.870Z",
       "model": {
         "provider": "local-demo",
         "id": "support-echo-1",
@@ -82,12 +82,12 @@
         "text": "We confirmed a duplicate charge of $49.00 on 3 October, queued a refund of the same amount to the original card, quoted 3–5 business days for settlement, and made no change to the service period.",
         "sha256": "75ea1b1c754479ae203b8dc41ada33d6eec4665b68abaed14b9c0de06a5fa89a"
       },
-      "kid": "p256:d332647b16f988d0",
-      "sig": "_pXVbcT7plRVcH45njE2Sye69G4efChYKUZx-Cpj7zmxchxfbenj7oPJ5pnQiWrvhYJnpxb6Uy5fAg6EyaVOpA"
+      "kid": "p256:b347ab2d1a50245e",
+      "sig": "uPF5x67RWJJbzh3eWBGsDpAdh90SPkDnblc-y1qpgpnccVIX5W_f49dYdimICKSh-oG2zZjg9ywDpTZuuXuB9g"
     }
   ],
   "batch": {
     "count": 3,
-    "root": "86761fd08d289924d040f9212870e2b9c95060e6da921efe2923b6c7dbbf0ce7"
+    "root": "d4fa4673d6532a1f7589b65913509d3751c92b0dae6be8b48396a656ee3c5e94"
   }
 }
