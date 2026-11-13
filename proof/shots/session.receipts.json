@@ -1,0 +1,93 @@
+{
+  "v": 1,
+  "exported_at": "2026-11-13T09:34:51.869Z",
+  "keys": {
+    "p256:fd76f8110ce892bb": {
+      "kty": "EC",
+      "crv": "P-256",
+      "x": "HJVxGcbqml8V2uIp0LE_w0RzM-QdKPjAbCW5LNHX4zU",
+      "y": "9VxCpJw9bhbiFafk-UmFD2JTRuX49hF1dH8GNtkpGGg"
+    }
+  },
+  "receipts": [
+    {
+      "v": 1,
+      "id": "rcpt_f1e1d447251e807b",
+      "prev": null,
+      "issued_at": "2026-11-13T09:34:51.360Z",
+      "model": {
+        "provider": "local-demo",
+        "id": "support-echo-1",
+        "params": {
+          "temperature": 0,
+          "deterministic": true,
+          "network": false
+        }
+      },
+      "request": {
+        "text": "Customer 4412 says they were charged twice in October. What do we do?",
+        "sha256": "c35487cc2233859142afb2ebde017a304489c6f437bafeac7f365d918d690501"
+      },
+      "response": {
+        "text": "I found two settled charges of $49.00 on 2 October and 3 October for customer 4412. The second one is a duplicate from a retried checkout. I have queued a refund of $49.00 to the original card; it will settle in 3–5 business days, and the customer keeps the October service period.",
+        "sha256": "4e2a309409bae149da11e8495dac3ea5c7e3c2a9440b78590e2bdd1c057d68e2"
+      },
+      "kid": "p256:fd76f8110ce892bb",
+      "sig": "jf_p44NwlaMoZQQYSmQHMJRyVr6Skcs7bgI-YePWKzRJezihByAP7Fe1fCzB6b1nErnhcto6NkC09aQ47izRKg"
+    },
+    {
+      "v": 1,
+      "id": "rcpt_505cb98d60c3a2c1",
+      "prev": "f385091c27f9e742b2d57a30f89f3ef3ceb86cbe58dbda86350efb66e48a7c80",
+      "issued_at": "2026-11-13T09:34:52.361Z",
+      "model": {
+        "provider": "local-demo",
+        "id": "support-echo-1",
+        "params": {
+          "temperature": 0,
+          "deterministic": true,
+          "network": false
+        }
+      },
+      "request": {
+        "text": "Can we make an exception to the 30-day refund window for customer 8817?",
+        "sha256": "35f9a403034a6b2dd918ad641c6cd95ac6de90ea6760270f0e3696f77e187e87"
+      },
+      "response": {
+        "text": "No. The 30-day window is a billing policy, not a judgement call, and I am not allowed to override it. Customer 8817 is on day 41. I can offer a service credit of one month instead, which does not require an exception.",
+        "sha256": "5867908471d2500857424bcd3dec4311d8bb8dce8ecb82dd0b55114ed41013d8"
+      },
+      "kid": "p256:fd76f8110ce892bb",
+      "sig": "qVkxUAlGkIqrxgdotR9oLv5kP7j0i3TIylNjOanOVXOhahmleS1TsLFFkgCTKZCIuLrjNVtJI9-XGXA77EFLOw"
+    },
+    {
+      "v": 1,
+      "id": "rcpt_481ba07d38d9efc4",
+      "prev": "1c63f05fa8fb831993ab1282a39961a8d5235531b8ab788094aa4a8b8dfcd1c0",
+      "issued_at": "2026-11-13T09:34:53.362Z",
+      "model": {
+        "provider": "local-demo",
+        "id": "support-echo-1",
+        "params": {
+          "temperature": 0,
+          "deterministic": true,
+          "network": false
+        }
+      },
+      "request": {
+        "text": "Summarise what we told customer 4412, for the audit log.",
+        "sha256": "cc5dbaf5e7184d6e55ea22eed8cd1b78e7cc3e7bb3e0d31cb72c6ef55bbb6b1d"
+      },
+      "response": {
+        "text": "We confirmed a duplicate charge of $49.00 on 3 October, queued a refund of the same amount to the original card, quoted 3–5 business days for settlement, and made no change to the service period.",
+        "sha256": "75ea1b1c754479ae203b8dc41ada33d6eec4665b68abaed14b9c0de06a5fa89a"
+      },
+      "kid": "p256:fd76f8110ce892bb",
+      "sig": "RcojgSuVlpdzR5KeO1g3kiHE4Ra-FAEWYR9SA02EcW1TeHGvfBC6NB8L3MmQLYl94krnHnyeEPewJtHOQlPyRw"
+    }
+  ],
+  "batch": {
+    "count": 3,
+    "root": "f56d82f147b28fbe6903c27201fd391ca01b9acde60caa8590f4ee81c237a000"
+  }
+}
